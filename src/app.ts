@@ -1,5 +1,5 @@
-import { PageComponent } from "./pages/page.js";
-import { ImageComponent } from "./pages/items/image.js";
+import { PageComponent } from "./components/pages/page.js";
+import { ImageComponent } from "./components/pages/items/image.js";
 
 class App {
   private readonly page: PageComponent;

@@ -8,8 +8,7 @@ export class ImageComponent {
     <img class="image_thumbnail">
   </div>
   <p class="image_title"></p>
-</section>
-    `;
+</section>`;
     this.element = template.content.firstElementChild! as HTMLElement;
 
     const imageElement = this.element.querySelector(
