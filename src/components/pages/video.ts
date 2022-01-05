@@ -13,12 +13,19 @@ export class VideoComponent extends BaseComponent<HTMLElement> {
     const videoElement = this.element.querySelector(
       ".video_thumbnail"
     )! as HTMLIFrameElement;
-    const modUrl = url.substring(17);
-    videoElement.src = `https://www.youtube.com/embed/${modUrl}`;
+    videoElement.src = this.extractUrlId(url);
 
     const titleElement = this.element.querySelector(
       ".video_title"
     )! as HTMLParagraphElement;
     titleElement.textContent = title;
+  }
+
+  private extractUrlId(url: string): string {
+    if (url.includes("watch?v=")) {
+      return `https://www.youtube.com/embed/${url.substring(32)}`;
+    } else {
+      return `https://www.youtube.com/embed/${url.substring(17)}`;
+    }
   }
 }
