@@ -1,4 +1,4 @@
-import { BaseComponent } from "../base.js";
+import { BaseComponent } from "../../base.js";
 
 export class ImageComponent extends BaseComponent<HTMLElement> {
   constructor(title: string, url: string) {
