@@ -8,6 +8,7 @@ type OnCloseListener = () => void;
 
 interface SectionContainer extends Component, Composable {
   setOnCloseListener(listener: OnCloseListener): void;
+  dragListener(parent: HTMLElement): void;
 }
 
 type SectionContainerConstructor = {
@@ -20,7 +21,7 @@ export class PageItemComponent
 {
   private closeListener?: OnCloseListener;
   constructor() {
-    super(`<li class="page-item">
+    super(`<li class="page-item" draggable="true">
             <section class="page-item_body"></section>
             <button class="page-item_controls">
               <span class="close">&times;</span>
@@ -40,6 +41,50 @@ export class PageItemComponent
   setOnCloseListener(listener: OnCloseListener) {
     this.closeListener = listener;
   }
+  dragListener(parent: HTMLElement) {
+    let dragged: HTMLLIElement;
+    let drop: HTMLElement;
+    let dropIndex: number;
+    parent.addEventListener("drag", () => {}, false);
+    parent.addEventListener(
+      "dragstart",
+      (event) => {
+        dragged = event.target! as HTMLLIElement;
+      },
+      false
+    );
+    parent.addEventListener(
+      "dragover",
+      function (event) {
+        event.preventDefault();
+      },
+      false
+    );
+    parent.addEventListener(
+      "dragenter",
+      (event) => {
+        const target = event.target! as HTMLElement;
+        drop = target.parentNode?.parentNode! as HTMLElement;
+        dropIndex = Array.from(parent.children).indexOf(drop);
+      },
+      false
+    );
+    parent.addEventListener(
+      "drop",
+      (event) => {
+        event.preventDefault();
+        dropIndex <= -1 ? 0 : dropIndex;
+        if (drop.className.includes("page-item")) {
+          parent.removeChild(dragged);
+          parent.insertBefore(
+            dragged,
+            parent.childNodes[dropIndex]! as HTMLElement
+          );
+        }
+      },
+      false
+    );
+  }
 }
 
 export class PageComponent
@@ -56,5 +101,6 @@ export class PageComponent
     item.setOnCloseListener(() => {
       item.removeFrom(this.element);
     });
+    item.dragListener(this.element);
   }
 }

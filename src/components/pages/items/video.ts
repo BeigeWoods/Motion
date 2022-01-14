@@ -21,11 +21,15 @@ export class VideoComponent extends BaseComponent<HTMLElement> {
     titleElement.textContent = title;
   }
 
-  private extractUrlId(url: string): string {
-    if (url.includes("watch?v=")) {
-      return `https://www.youtube.com/embed/${url.substring(32)}`;
+  private extractUrlId(url: string): string | never {
+    const regExp =
+      /(?:(?:youtu\.be\/)|(?:youtube\.com\/(?:(?:watch\?v\=)|(?:embed\/))))([a-zA-Z0-9-]{11})/;
+    const match = url.match(regExp);
+    console.log(match);
+    if (match) {
+      return `https://www.youtube.com/embed/${match[1]}`;
     } else {
-      return `https://www.youtube.com/embed/${url.substring(17)}`;
+      throw new Error("invalid URL");
     }
   }
 }
